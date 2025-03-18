@@ -14,7 +14,7 @@ class Book {
 //object from input fields in the HTML and adds it to an array named inventory. After adding
 //a book, clear the input fields
 
-const inventory = [];
+let inventory = [];
 
 function clearInputFields() {
     document.getElementById("title").value= "";
@@ -36,6 +36,8 @@ function addBook() {
 
     const newBook = new Book(title, author, category);
     inventory.push(newBook);
+
+    saveInventory();
     clearInputFields();
     displayInventory();
 }
@@ -97,3 +99,16 @@ function searchBooks() {
 // inventory to JSON when a book is added and load the inventory from
 //JSON when the page is loaded. Use localStorage for storing the JSON string.
 
+function saveInventory() {
+    localStorage.setItem("inventory", JSON.stringify(inventory));
+}
+
+function loadInventory() {
+    if(localStorage.getItem("inventory")){
+        inventory = JSON.parse(localStorage.getItem("inventory"));
+        inventory = storedBooks.map(book => new Book(book.title, book.author, book.category));   
+    }
+    displayInventory();
+}
+
+window.onload = loadInventory;
