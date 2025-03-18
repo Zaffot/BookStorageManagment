@@ -16,6 +16,7 @@ class Book {
 
 let inventory = [];
 
+
 function clearInputFields() {
     document.getElementById("title").value= "";
     document.getElementById("author").value= "";
@@ -62,6 +63,13 @@ function displayInventory() {
         // add book details to the div
         bookDiv.textContent = `${book.title} by ${book.author} (${book.category})`;
 
+        //delete button
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add("delete-button");
+        deleteButton.onclick = function() {deleteBook(i);};
+
+        bookDiv.appendChild(deleteButton);
         inventorylist.appendChild(bookDiv);
     }
         
@@ -88,6 +96,7 @@ function searchBooks() {
         if (book.category.toLowerCase() === searchCategory || searchCategory === ""){
             
             let bookDiv = document.createElement("div");
+            bookDiv.classList.add("book-item"); //for css styling
             bookDiv.textContent = `${book.title} by ${book.author} (${book.category})`;
             inventorylist.appendChild(bookDiv);
         }    
@@ -108,6 +117,16 @@ function loadInventory() {
         inventory = JSON.parse(localStorage.getItem("inventory"));
         inventory = storedBooks.map(book => new Book(book.title, book.author, book.category));   
     }
+    displayInventory();
+}
+
+
+//6. Deleting Books: Implement a function deleteBook() that removes a book from the
+//inventory array when the delete button is clicked.
+
+function deleteBook(index) {
+    inventory.splice(index, 1);
+    saveInventory();
     displayInventory();
 }
 
